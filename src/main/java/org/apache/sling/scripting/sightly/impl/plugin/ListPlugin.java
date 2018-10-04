@@ -45,6 +45,7 @@ public class ListPlugin extends AbstractPlugin {
     private static final String LAST = "last";
     private static final String ODD = "odd";
     private static final String EVEN = "even";
+    private static final String LENGTH = "length";
 
     public ListPlugin() {
         name = "list";
@@ -101,11 +102,12 @@ public class ListPlugin extends AbstractPlugin {
             private MapLiteral buildStatusObj(String indexVar, String sizeVar) {
                 HashMap<String, ExpressionNode> obj = new HashMap<>();
                 Identifier indexId = new Identifier(indexVar);
+                Identifier size = new Identifier(sizeVar);
                 BinaryOperation firstExpr = new BinaryOperation(BinaryOperator.EQ, indexId, NumericConstant.ZERO);
                 BinaryOperation lastExpr = new BinaryOperation(
                         BinaryOperator.EQ,
                         indexId,
-                        new BinaryOperation(BinaryOperator.SUB, new Identifier(sizeVar), NumericConstant.ONE));
+                        new BinaryOperation(BinaryOperator.SUB, size, NumericConstant.ONE));
                 obj.put(INDEX, indexId);
                 obj.put(COUNT, new BinaryOperation(BinaryOperator.ADD, indexId, NumericConstant.ONE));
                 obj.put(FIRST, firstExpr);
@@ -115,6 +117,7 @@ public class ListPlugin extends AbstractPlugin {
                 obj.put(LAST, lastExpr);
                 obj.put(ODD, parityCheck(indexId, NumericConstant.ZERO));
                 obj.put(EVEN, parityCheck(indexId, NumericConstant.ONE));
+                obj.put(LENGTH, size);
                 return new MapLiteral(obj);
             }
 
